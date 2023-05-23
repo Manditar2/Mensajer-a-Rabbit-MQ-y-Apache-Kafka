@@ -20,7 +20,7 @@ def productor():
             channel.basic_publish(exchange='',
                                 routing_key='hello',
                                 body=str(threading.current_thread().name) + " " + str(datetime.datetime.now()))
-            print(" [x] Sent 'Hello World!'")   
+            print(" [x] Sent from" + threading.current_thread().name)   
         print("Productor teriminado")
         connection.close()
 
