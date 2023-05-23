@@ -1,0 +1,10 @@
+
+docker run -d --name servidor_zookeeper --network red_kafka -p 2181:2181 -e ALLOW_ANONYMOUS_LOGIN=yes bitnami/zookeeper:latest
+
+docker run -d --name broker1 --network red_kafka -p 9092:9092 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_BROKER_ID=1 -e KAFKA_CFG_ZOOKEEPER_CONNECT=servidor_zookeeper:2181 bitnami/kafka:latest
+
+
+docker run --d --network brokers_default confluentinc/cp-kafkacat kafkacat -P -b kafka1:9092  -t mytopic -p 0 -K:
+
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic_test --from-beginning
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic topic_test --from-beginning
