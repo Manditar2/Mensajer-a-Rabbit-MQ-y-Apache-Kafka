@@ -1,13 +1,41 @@
 import pika
+import threading
+import time
+import datetime
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-channel = connection.channel()
+actual_time = time.time()
 
-channel.queue_declare(queue='hello')
+deltaT=0
+stop = False
 
-channel.basic_publish(exchange='',
-                      routing_key='hello',
-                      body='Hello World!')
-print(" [x] Sent 'Hello World!'")
+def testo():
+    if deltaT == 0:
+        print("sin tiempo seleccionado")
+    else:
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        channel = connection.channel()
+        channel.queue_declare(queue='hello')
+        while stop != True:
+            time.sleep(deltaT)
+            channel.basic_publish(exchange='',
+                                routing_key='hello',
+                                body=str(threading.current_thread().name) + " " + str(datetime.datetime.now()))
+            print(" [x] Sent 'Hello World!'")   
+        print("Productor teriminado")
+        connection.close()
 
-connection.close()
+while True:
+    t = threading.Thread(target=testo)
+    a=input("seleccionar tiempo de envio: ")
+    if a == "q":
+        break
+    elif a == "s":
+        stop = True
+        # t.join()
+        # stop = False
+    else:
+        deltaT = float(a)
+        t.start()
+
+
+
