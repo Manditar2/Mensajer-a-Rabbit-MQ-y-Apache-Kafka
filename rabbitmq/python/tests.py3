@@ -8,7 +8,7 @@ actual_time = time.time()
 deltaT=0
 stop = False
 
-def testo():
+def productor():
     if deltaT == 0:
         print("sin tiempo seleccionado")
     else:
@@ -25,7 +25,7 @@ def testo():
         connection.close()
 
 while True:
-    t = threading.Thread(target=testo)
+    t = threading.Thread(target=productor)
     a=input("seleccionar tiempo de envio: ")
     if a == "q":
         break
