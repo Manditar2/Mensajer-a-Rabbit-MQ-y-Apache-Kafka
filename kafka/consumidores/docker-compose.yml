@@ -1,0 +1,16 @@
+version: '3'
+services:
+  consumidores:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./consumidores.py:/usr/src/app/consumidores.py
+    working_dir: /usr/src/app
+    networks:
+      - brokers_default
+    command: python consumidores.py
+
+networks:
+  brokers_default:
+    external: true

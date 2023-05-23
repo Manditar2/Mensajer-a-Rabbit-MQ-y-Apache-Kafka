@@ -1,0 +1,16 @@
+version: '3'
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./productores.py:/usr/src/app/productores.py
+    working_dir: /usr/src/app
+    networks:
+      - brokers_default
+    command: python productores.py
+
+networks:
+  brokers_default:
+    external: true
