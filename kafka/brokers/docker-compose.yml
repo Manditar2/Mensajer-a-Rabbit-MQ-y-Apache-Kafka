@@ -16,6 +16,6 @@ services:
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "topic_test:1:1"
+      KAFKA_CREATE_TOPICS: "topic0:1:1,topic1:3:1, topic2:3:1, topic3:4:1,topic4:5:1"
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
