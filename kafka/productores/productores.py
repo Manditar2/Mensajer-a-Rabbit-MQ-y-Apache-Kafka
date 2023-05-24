@@ -80,8 +80,6 @@ def ProduciendoParticiones_mismoTopico(nParticiones,bootstrapServer, topico):
         time.sleep(delta*0.75)
 
 
-
-
 lock = threading.Lock()
 hilos = []
 
@@ -107,19 +105,18 @@ hilos = []
 
 ############################################ Escalabilidad con particiones ###########################################
 
-n = 3
+# n = 3
 
-for i in range(n):
-    hilo = threading.Thread(target = ProduciendoParticiones_mismoTopico, args=(particiones_topico[2],bootstrapServer, 'topic2',))
-    hilo.start()
-    hilos.append(hilo)
+# for i in range(n):
+#     hilo = threading.Thread(target = ProduciendoParticiones_mismoTopico, args=(particiones_topico[2],bootstrapServer, 'topic2',))
+#     hilo.start()
+#     hilos.append(hilo)
 
-for hilo in hilos:
-    hilo.join()
+# for hilo in hilos:
+#     hilo.join()
 
-while(1):
-    print('termino')
-    sleep(120)
+# while(1):
+#     print('termino')
+#     sleep(120)
 
-for hilo in hilos:
-    hilo.join()
+###########################################################################################################################
