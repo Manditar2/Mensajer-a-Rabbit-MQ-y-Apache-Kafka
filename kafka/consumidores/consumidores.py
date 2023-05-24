@@ -16,17 +16,14 @@ def consumir(topico,bootstrapServer):
     group_id='nuevo',
     value_deserializer=lambda x: loads(x.decode('utf-8')))
 
-    consumer.subscribe(topics=['topic1'])
-    print(consumer.partitions_for_topic('topic1'))
+    consumer.subscribe(topics=['topic2'])
 
     for event in consumer:
-        print("hola")
         inicio = time.time()
         event_data = event.value
         final = time.time()
         tiempo = final - inicio
         print(event_data)
-
         lock.acquire()
 
         try:
@@ -49,10 +46,10 @@ def mConsumidores(topico): #Pregunta 5
         event_data = event.value
         final = time.time()
         tiempo = final - inicio
-        print('Estoy en el canal : ' + topico + ' Mensaje : ' + str(event_data))
+        print('Estoy en el canal : ' + topico + ' Mensaje : ' + str(event_data) + ' particion : ' str(event.partition))
         lock.acquire()
         try:
-            with open('tiempos_consumidor.txt', 'a') as file:
+            with open('tiempos_consumidor_pregunta5.txt', 'a') as file:
                 file.write('\n' + f"{tiempo}")
         finally:
             lock.release()
@@ -81,4 +78,17 @@ lock = threading.Lock()
 #     hilo.join()
 
 ##################################################### Escalabilidad particiones #################################################
+
+# n = 3 
+
+# for i in range(n):
+#     hilo = threading.Thread(target = mConsumidores, args=(topicos[i],))
+#     hilo.start()
+#     hilos.append(hilo)
+
+# for hilo in hilos:
+#     hilo.join()
+
+
+####################################################################################################################################
 
