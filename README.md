@@ -1,7 +1,7 @@
 # T2-Distribuido
 Kafka y rabbit MQ
 
-#Kafka
+# Kafka
 
 Se accede a la carpeta brokers y se ejecuta el docker-compose up -d
 
