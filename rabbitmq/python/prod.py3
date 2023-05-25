@@ -7,7 +7,7 @@ import json
 
 #variables
 actual_time = time.time()
-n_productores = 40
+n_productores = 50
 stop = False
 
 ## Alternar
@@ -16,7 +16,7 @@ data = open("small_array.txt", "r").read()
 data = data.replace("[", "").replace("]", "").replace("'", "").split(", ")
 
 
-#ejemplo
+# ejemplo
 # connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 # channel = connection.channel()
 # channel.queue_declare(queue='test1')
@@ -31,21 +31,24 @@ lock_canales = []
 for i in range(5):
     conexiones.append(pika.BlockingConnection(pika.ConnectionParameters('localhost')))
     canales.append(conexiones[i].channel())
-    canales[i].queue_declare(queue="hello")
+    canales[i].queue_declare(queue="queue")
     # canales[i].queue_declare(queue="queue "+str(i))
     lock_canales.append(threading.Lock())
 
 
 def productor():
-    deltaT = random.randint(1,2)
+    # deltaT = random.randint(1,2)
+    deltaT = 1
     eleccion_canal = random.randint(0,4)
-    while stop != True:
+    # while stop != True:
+    for i in range(500):
         time.sleep(deltaT)
         inicio = time.time()
         lock_canales[eleccion_canal].acquire()
+        datas = data[random.randint(0,99)]
         canales[eleccion_canal].basic_publish(exchange='',
-                            routing_key="hello",
-                            body=json.dumps({"value": data[random.randint(0,99)], "timestamp": time.time()}).encode('utf-8'))
+                            routing_key="queue",
+                            body=json.dumps({"value": datas, "timestamp": inicio}).encode('utf-8'))
         fin = time.time()
         tiempo = fin - inicio
         lock.acquire()
@@ -56,9 +59,11 @@ def productor():
             lock.release()
             lock_canales[eleccion_canal].release()
 
-        print("Sent from " + threading.current_thread().name)   
+        print("Sent from " + threading.current_thread().name + " "+ json.dumps({"value": datas, "timestamp": inicio}))    
     print("Productor teriminado")
-    conexiones[eleccion_canal].close()
+    # conexiones[eleccion_canal].close()
+
+    
 
 
 lock = threading.Lock()
@@ -70,5 +75,7 @@ for i in range(n_productores):
 
 while True:
     input("presione enter para detener el envio")
-    stop = True
+    for i in range(5):
+        conexiones[i].close()
+    # stop = True
     break
